@@ -28,14 +28,16 @@ class TestPasswordGenerator(unittest.TestCase):
 
     def test_generate_random_passphrase(self):
         """
-        Test the generate_random_passphrase method to ensure it generates a passphrase with the correct number of words.
+        Test the generate_random_passphrase method to ensure it generates a passphrase
+        with the correct number of words.
         """
         passphrase = self.generator.generate_random_passphrase(num_words=4)
         self.assertEqual(len(passphrase.split()), 4)
 
     def test_create_password_hash(self):
         """
-        Test the create_password_hash method to ensure it generates a valid hash for a given password.
+        Test the create_password_hash method to ensure it generates a valid hash for
+        a given password.
         """
         password = "testpassword"
         password_hash = self.generator.create_password_hash(password)
@@ -44,12 +46,17 @@ class TestPasswordGenerator(unittest.TestCase):
 
     def test_generate_readable_password(self):
         """
-        Test the generate_readable_password method to ensure it generates a readable password of the correct length
+        Test the generate_readable_password method to ensure it generates a
+        readable password of the correct length
         using alternating consonants and vowels.
         """
         password = self.readable_generator.generate_readable_password()
         self.assertEqual(len(password), 12)
-        self.assertTrue(all(c in 'aeiou' or c in (set(string.ascii_lowercase) - set('aeiou')) for c in password))
+        self.assertTrue(
+            all(c in 'aeiou' or c in (
+                set(string.ascii_lowercase) - set('aeiou')
+            ) for c in password)
+        )
 
 if __name__ == '__main__':
     unittest.main()

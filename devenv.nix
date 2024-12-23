@@ -7,6 +7,8 @@ let
     glib
     openssh
     openssl
+    black
+    nixpkgs-fmt
   ];
 
 in 
@@ -24,6 +26,8 @@ in
     tesseract
     sops
     openssl
+    black
+    nixpkgs-fmt
   ];
 
   env = {

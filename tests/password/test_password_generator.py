@@ -1,5 +1,8 @@
 import unittest
-from lx_administration.password.generator import PasswordGenerator, ReadablePasswordGenerator
+from lx_administration.password.generator import (
+    PasswordGenerator,
+    ReadablePasswordGenerator
+)
 import string
 
 class TestPasswordGenerator(unittest.TestCase):
@@ -9,15 +12,18 @@ class TestPasswordGenerator(unittest.TestCase):
 
     def setUp(self):
         """
-        Set up the test case with instances of PasswordGenerator and ReadablePasswordGenerator.
+        Set up the test case with instances of PasswordGenerator
+        and ReadablePasswordGenerator.
         """
         self.generator = PasswordGenerator(length=12)
         self.readable_generator = ReadablePasswordGenerator(length=12)
 
     def test_generate_random_password(self):
         """
-        Test the generate_random_password method to ensure it generates a password of the correct length
-        and containing at least one lowercase letter, one uppercase letter, one digit, and one punctuation character.
+        Test the generate_random_password method to ensure it generates
+        a password of the correct length and containing at least
+        one lowercase letter, one uppercase letter, one digit,
+        and one punctuation character.
         """
         password = self.generator.generate_random_password()
         self.assertEqual(len(password), 12)

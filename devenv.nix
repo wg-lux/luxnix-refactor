@@ -27,7 +27,7 @@ in
     sops
     openssl
     black
-    nixpkgs-fmt
+    nixpkgs-fmt #TODO WILL BE DEPRECATED SOON ->  nixfmt
   ];
 
   env = {

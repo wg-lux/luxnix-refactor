@@ -1,6 +1,7 @@
 import os
 import subprocess
 
+
 def create_openssh_keys(output_dir, key_name="id_rsa", passphrase=None, key_type="rsa"):
     """
     Create OpenSSH key pair.
@@ -9,8 +10,9 @@ def create_openssh_keys(output_dir, key_name="id_rsa", passphrase=None, key_type
         output_dir (str): Directory where the keys will be saved.
         key_name (str): Base name for the keys. Defaults to 'id_rsa'.
         passphrase (str): Optional passphrase for the private key. Defaults to None.
-        key_type (str): Type of the key to generate ('rsa' or 'ed25519'). Defaults to 'rsa'.
-    
+        key_type (str): Type of the key to generate ('rsa' or 'ed25519').
+        Defaults to 'rsa'.
+
     Returns:
         dict: Paths to the generated private and public keys.
     """
@@ -30,10 +32,13 @@ def create_openssh_keys(output_dir, key_name="id_rsa", passphrase=None, key_type
     # Prepare ssh-keygen command
     cmd = [
         "ssh-keygen",
-        "-t", key_type,
-        "-f", private_key_path,
-        "-N", passphrase or "",  # Empty passphrase if None
-        "-q"  # Quiet mode
+        "-t",
+        key_type,
+        "-f",
+        private_key_path,
+        "-N",
+        passphrase or "",  # Empty passphrase if None
+        "-q",  # Quiet mode
     ]
 
     # Add bit size for RSA keys
@@ -43,7 +48,4 @@ def create_openssh_keys(output_dir, key_name="id_rsa", passphrase=None, key_type
     # Run the ssh-keygen command
     subprocess.run(cmd, check=True)
 
-    return {
-        "private_key": private_key_path,
-        "public_key": public_key_path
-    }
+    return {"private_key": private_key_path, "public_key": public_key_path}

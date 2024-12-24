@@ -9,15 +9,16 @@ dependencies = [
     "myst-parser[linkify]>=4.0.0",
     "pyopenssl>=24.3.0",
     "sphinx>=8.1.3",
-    "black>=23.7.0"
+    "black>=23.7.0",
+    "ruff>=0.8.4",
 ]
 
 [tool.setuptools]
 packages = ["lx_administration"]
 
 [tool.ruff]
-select = ["E", "F", "W"]
-ignore = []
+lint.select = ["E", "F", "W"]
+lint.ignore = []
 
 [tool.uv.sources]
 lx_administration = { workspace = true }

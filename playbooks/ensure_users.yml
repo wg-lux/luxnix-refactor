@@ -1,0 +1,22 @@
+# playbooks/ensure_users.yml
+# Usage: ansible-playbook -i inventory/hosts.ini playbooks/ensure_users.yml
+---
+- name: Check if  users on all systems
+  hosts: test_group
+  become: true
+  tasks:
+    - name: Ensure default users are present
+      ansible.builtin.user:
+        name: "{{ item.username }}"
+        state: present
+      loop: "{{ default_users }}"
+      loop_control:
+        label: "{{ item.username }}"
+
+    - name: Ensure optional users are present
+      ansible.builtin.user:
+        name: "{{ item.username }}"
+        state: present
+      loop: "{{ optional_users | default([]) }}"
+      loop_control:
+        label: "{{ item.username }}"

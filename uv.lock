@@ -11,6 +11,34 @@ wheels = [
 ]
 
 [[package]]
+name = "ansible"
+version = "11.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "ansible-core" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/5c/54/dc559b305948e9c234f79ef00f7aed52d7c127c8616c0c2f3f336103ccdd/ansible-11.1.0.tar.gz", hash = "sha256:d01b425990d960d2a33fc378e1b73dbca1c0e28bc22f4056ab6b3c8e9ae74fba", size = 41299850 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d2/75/4c0583e76a3c2eac0c8d878568fd18c8a66f3da8888dca712cae14b195ac/ansible-11.1.0-py3-none-any.whl", hash = "sha256:bbaf7073993f019fc0293fc8b76c7b215081831957c28eb020f12c270a16e8f0", size = 51414573 },
+]
+
+[[package]]
+name = "ansible-core"
+version = "2.18.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cryptography" },
+    { name = "jinja2" },
+    { name = "packaging" },
+    { name = "pyyaml" },
+    { name = "resolvelib" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/42/46/15836f1f48e2682bd5d04f7b3e2cb27e17626bec3cd7a4f2a7b0ccefbbd2/ansible_core-2.18.1.tar.gz", hash = "sha256:14cac1f92bbdae881cb0616eddeb17925e8cb507e486087975e724533d9de74f", size = 3069965 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d7/24/dd43ac6d09c8adab1368171853989bf0c84a653a35f57eaeee0411e91bb7/ansible_core-2.18.1-py3-none-any.whl", hash = "sha256:4a312e416e09c7271188d6b8e2b1062fc6834fefd6a1814d0e02fb8aadb3e1ba", size = 2214624 },
+]
+
+[[package]]
 name = "babel"
 version = "2.16.0"
 source = { registry = "https://pypi.org/simple" }
@@ -263,6 +291,7 @@ name = "lx-administration"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "ansible" },
     { name = "black" },
     { name = "cryptography" },
     { name = "myst-parser", extra = ["linkify"] },
@@ -273,6 +302,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "ansible", specifier = ">=11.1.0" },
     { name = "black", specifier = ">=23.7.0" },
     { name = "cryptography", specifier = ">=44.0.0" },
     { name = "myst-parser", extras = ["linkify"], specifier = ">=4.0.0" },
@@ -498,6 +528,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/63/70/2bf7780ad2d390a8d301ad0b550f1581eadbd9a20f896afe06353c2a2913/requests-2.32.3.tar.gz", hash = "sha256:55365417734eb18255590a9ff9eb97e9e1da868d4ccd6402399eaf68af20a760", size = 131218 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/f9/9b/335f9764261e915ed497fcdeb11df5dfd6f7bf257d4a6a2a686d80da4d54/requests-2.32.3-py3-none-any.whl", hash = "sha256:70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6", size = 64928 },
+]
+
+[[package]]
+name = "resolvelib"
+version = "1.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ce/10/f699366ce577423cbc3df3280063099054c23df70856465080798c6ebad6/resolvelib-1.0.1.tar.gz", hash = "sha256:04ce76cbd63fded2078ce224785da6ecd42b9564b1390793f64ddecbe997b309", size = 21065 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d2/fc/e9ccf0521607bcd244aa0b3fbd574f71b65e9ce6a112c83af988bbbe2e23/resolvelib-1.0.1-py2.py3-none-any.whl", hash = "sha256:d2da45d1a8dfee81bdd591647783e340ef3bcb104b54c383f70d422ef5cc7dbf", size = 17194 },
 ]
 
 [[package]]

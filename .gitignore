@@ -1,4 +1,4 @@
-.envrc_allowed
+.repo_initialized
 # direnv
 .direnv
 .env

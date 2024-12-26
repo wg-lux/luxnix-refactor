@@ -48,10 +48,10 @@ in
   scripts = {
     hello.exec = "${pkgs.uv}/bin/uv run python hello.py";
     utest.exec = "${pkgs.uv}/bin/uv run python -m unittest";
-  };
-
-  tasks = {
-  
+    initialize_luxnix_repo.exec = ''
+      direnv allow
+      touch .repo_initialized
+    '';
   };
 
   processes = {

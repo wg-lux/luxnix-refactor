@@ -34,6 +34,7 @@ in {
     pythonPackages = mkOption {
       default = with pkgs."python${cfg.pythonVersion}Packages" ; [
         ansible
+        pexpect
       ];
       type = types.listOf types.package;
       description = "The python packages to use";

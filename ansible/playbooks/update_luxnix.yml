@@ -50,7 +50,7 @@
       ansible.builtin.expect:
         command: nh os switch .
         responses:
-          "Password:": "{{ admin_password }}"
+          "Password:": macaroni-skipping #  "{{ admin_password }}"
       args:
         chdir: "{{ luxnix_dest }}"
       when: git_update.changed

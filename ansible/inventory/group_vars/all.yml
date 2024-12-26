@@ -1,0 +1,7 @@
+# inventory/group_vars/all.yml
+---
+ansible_user: admin
+ansible_ssh_private_key_file: ~/.ssh/id_ed25519
+
+luxnix_repo: "https://github.com/wg-lux/luxnix-refactor.git"
+luxnix_dest: "/home/admin/luxnix-test-target"

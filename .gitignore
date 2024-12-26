@@ -1,3 +1,4 @@
+.envrc_allowed
 # direnv
 .direnv
 .env

@@ -1,0 +1,42 @@
+- name: Ensure luxnix-test-target contains an up-to-date Git repo
+  hosts: test_group
+  become: true # changed from yes to true
+  become_user: admin
+  tasks:
+    - name: Clone or update the wg-lux/luxnix-refactor repository
+      ansible.builtin.git:
+        repo: "{{ luxnix_repo }}"
+        dest: "{{ luxnix_dest }}"
+        version: "dev"
+        update: true # changed from yes to true
+        force: true # changed from yes to true
+      register: git_update
+
+- name: Ensure direnv allow has been run
+  hosts: test_group
+  become: true
+  become_user: admin
+  tasks:
+    - name: Check if direnv allow has been run
+      ansible.builtin.command:
+        cmd: direnv status
+        creates: "{{ luxnix_dest }}/.envrc_allowed"
+      register: direnv_status
+      failed_when: direnv_status.rc not in [0, 1]
+
+    - name: Run direnv allow if required
+      ansible.builtin.command:
+        cmd: direnv allow
+        creates: "{{ luxnix_dest }}/.envrc_allowed"
+      when: direnv_status.rc == 1
+
+- name: Run nh os switch if git repo was updated
+  hosts: test_group
+  become: true
+  become_user: admin
+  tasks:
+    - name: Run nh os switch
+      ansible.builtin.command:
+        cmd: nh os switch .
+        chdir: "{{ luxnix_dest }}"
+      when: true #git_update.after != git_update.before

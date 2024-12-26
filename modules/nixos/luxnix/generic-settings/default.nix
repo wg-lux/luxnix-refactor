@@ -21,6 +21,12 @@ in {
       '';
     };
 
+    hostPlatform = mkOption {
+      type = types.str;
+      default = "x86_64-linux";
+      description = "Default Host Platform";
+    };
+
     sensitiveServiceGID = mkOption {
       type = types.int;
       default = 901;

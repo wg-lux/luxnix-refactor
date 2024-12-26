@@ -23,6 +23,12 @@ in {
       nix-prefetch-scripts
     ];
 
+    systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
+    systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;
+
+    security.rtkit.enable = lib.mkDefault true;
+    programs.coolercontrol.enable = true;
+
     systemd.tmpfiles.rules = [
       "d /etc/user-passwords 0700 admin users -"
     ];
@@ -36,7 +42,8 @@ in {
       graphics.enable = true;
     };
 
-
+    nixpkgs.hostPlatform = lib.mkDefault config.luxnix.generic-settings.hostPlatform;
+    
     cli.programs = {
       nh.enable = true;
       nix-ld.enable = true;

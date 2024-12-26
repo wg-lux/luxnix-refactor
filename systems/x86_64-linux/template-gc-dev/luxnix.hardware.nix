@@ -1,0 +1,3 @@
+{
+  luxnix.hardware.processorType = "CHANGEME";
+}

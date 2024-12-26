@@ -25,14 +25,7 @@
 
   security.rtkit.enable = true;
 
-  services = {
-    virtualisation.kvm.enable = false;
-    hardware.openrgb.enable = false;
-    luxnix = {
-      ollama.enable = false;
-      nfs.enable = false; #CHANGEME
-    };
-  };
+  services = {};
   
   luxnix.nvidia-prime = {
     enable = true; # enables common and desktop (with addon plasma) roles
@@ -48,6 +41,8 @@
     allowedTCPPorts = [ 8300 80 443 ];
     allowedUDPPorts = [ 53 ];
   };
+
+  luxnix.hardware.processorType = "intel";
 
   # services.luxnix.keycloak = {
   #   enable = true;

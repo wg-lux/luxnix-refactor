@@ -24,6 +24,11 @@ in {
     #     uid = 400;
     #   };
 
+    environment.systemPackages = with pkgs; [
+      ansible
+      ansible-lint
+    ];
+
     luxnix.python.sw.enable = true;
     
   };

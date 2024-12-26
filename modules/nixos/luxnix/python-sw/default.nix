@@ -31,6 +31,8 @@ in {
       description = "The python package to use";
     };
 
+
+
     pythonPackages = mkOption {
       default = with pkgs."python${cfg.pythonVersion}Packages" ; [
         ansible
@@ -45,6 +47,8 @@ in {
 
     environment.systemPackages = [
       cfg.pythonPackage
+      pkgs.ansible
+      # pkgs.pexpect
     ] ++ cfg.pythonPackages;
   };
   

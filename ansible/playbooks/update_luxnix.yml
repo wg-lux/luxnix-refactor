@@ -1,46 +1,56 @@
 - name: Ensure luxnix-test-target contains an up-to-date Git repo
   hosts: test_group
-  become: true # changed from yes to true
+  become: true
   become_user: admin
+  vars:
+    luxnix_repo: "https://github.com/wg-lux/luxnix-refactor.git"
+    luxnix_dest: "/home/admin/luxnix-test-target"
   tasks:
+    - name: Ensure parent directories exist
+      ansible.builtin.file:
+        path: "{{local_users_passwords_dir}}"
+        state: directory
+
     - name: Clone or update the wg-lux/luxnix-refactor repository
       ansible.builtin.git:
         repo: "{{ luxnix_repo }}"
         dest: "{{ luxnix_dest }}"
         version: "dev"
-        update: true # changed from yes to true
-        force: true # changed from yes to true
+        update: true
+        force: true
       register: git_update
-# # check if "{{ luxnix_dest }}/.envrac_allowed" is present
-# # if not, run direnv allow
-# - name: Check if initialize_luxnix_repo was run
-#   hosts: test_group
-#   become: true
-#   become_user: admin
-#   tasks:
-#     - name: Check if initialization is required
-#       ansible.builtin.stat:
-#         path: "{{ luxnix_dest }}/.repo_initialized"
-#       register: repo_init_check
 
-# - name: Run directory initialization (devenv run initialize_luxnix_repo)
-#   hosts: test_group
-#   become: true
-#   become_user: admin
-#   tasks:
-#     - name: Run directory initialization
-#       ansible.builtin.command:
-#         cmd: devenv shell -i initialize_luxnix_repo
-#         chdir: "{{ luxnix_dest }}"
-#       when: repo_init_check.stat.exists == false
-
-- name: Run nh os switch if git repo was updated
-  hosts: test_group
-  become: true
-  become_user: admin
-  tasks:
-    - name: Run nh os switch
+    - name: Ensure direnv allow has been run
       ansible.builtin.command:
-        cmd: nh os switch .
+        cmd: direnv status
+      register: direnv_status
+      failed_when: direnv_status.rc not in [0, 1]
+
+    - name: Run direnv allow if required
+      ansible.builtin.shell:
+        cmd: direnv allow
+      when: direnv_status.rc == 1
+
+    - name: Transfer admin password file from source to target machine
+      ansible.builtin.copy:
+        src: "{{ admin_password_file_source }}"
+        dest: "{{ admin_password_file }}"
+        mode: 0600
+
+    - name: Read admin password from file
+      ansible.builtin.slurp:
+        src: "{{ admin_password_file }}"
+      register: admin_password_file
+
+    - name: Set admin password fact
+      set_fact:
+        admin_password: "{{ admin_password_file.content | b64decode | string }}"
+
+    - name: Run nh os switch if git repo was updated
+      ansible.builtin.expect:
+        command: nh os switch .
+        responses:
+          "Password:": "macaroni-skipping" # "{{ admin_password }}"
+      args:
         chdir: "{{ luxnix_dest }}"
-      when: true # git_update.after != git_update.before
+      when: git_update.changed

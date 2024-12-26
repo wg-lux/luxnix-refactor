@@ -8,7 +8,7 @@
   tasks:
     - name: Ensure parent directories exist
       ansible.builtin.file:
-        path: "{{local_users_passwords_dir}}"
+        path: "{{ local_users_passwords_dir }}"
         state: directory
 
     - name: Clone or update the wg-lux/luxnix-refactor repository
@@ -50,7 +50,7 @@
       ansible.builtin.expect:
         command: nh os switch .
         responses:
-          "Password:": "macaroni-skipping" # "{{ admin_password }}"
+          "Password:": "{{ admin_password }}"
       args:
         chdir: "{{ luxnix_dest }}"
       when: git_update.changed

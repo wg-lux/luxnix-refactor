@@ -14,7 +14,7 @@ with lib.luxnix; let
   
 in {
   options.luxnix.python.sw = with types; {
-    enable = mkBoolOpt false "Enable or disable the Nvidia GPU Support";
+    enable = mkBoolOpt false "Enable or disable sw python";
 
     # Other bool options are: enable cuda support for nix packages, add xserver driver, add initrd-kernel-module, addd autoadddriverrunpath
     # enable prime sync, enable modesetting, 

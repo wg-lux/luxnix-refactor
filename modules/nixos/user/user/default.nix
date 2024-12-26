@@ -50,8 +50,7 @@ in {
     users.users.${cfg.name} =
       {
         shell = pkgs.zsh;
-        isNormalUser = true;
-        initialPassword = "1";
+        isNormalUser = true; 
         home = "/home/${cfg.name}";
         group = "root";
         hashedPasswordFile = passwordFile;

@@ -49,13 +49,13 @@
     allowedUDPPorts = [ 53 ];
   };
 
-  services.luxnix.keycloak = {
-    enable = true;
-    vpnIP = "172.16.255.106";
-    # port = 8080;
+  # services.luxnix.keycloak = {
+  #   enable = true;
+  #   vpnIP = "172.16.255.106";
+  #   # port = 8080;
 
-    hostname = "keycloak.endo-reg.net";
-  };
+  #   hostname = "keycloak.endo-reg.net";
+  # };
 
   programs.coolercontrol.enable = true;
 
@@ -79,13 +79,13 @@
     admin = {
       name = "admin";
     };
-    dev-01 = { # enabled by default
-      name = "dev-01";
-    };
-    user = { # enabled by default
-      enable = true;
-      name = "user";
-    };
+    # dev-01 = { # enabled by default
+    #   name = "dev-01";
+    # };
+    # user = { # enabled by default
+    #   enable = true;
+    #   name = "user";
+    # };
   };
 
   user.settings.mutable = false;

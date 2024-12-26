@@ -62,7 +62,7 @@
   roles = {
     # desktop.enable = true;
     gpu-client-dev.enable = true;   # Enables common, desktop(with plasma) and laptop-gpu roles                                # Also enables aglnet.client.enable = true;
-    postgres.main.enable = true;
+    postgres.main.enable = false;
     # ada.enable = true;
 
     # Testing
@@ -79,17 +79,9 @@
     admin = {
       name = "admin";
     };
-    # dev-01 = { # enabled by default
-    #   name = "dev-01";
-    # };
-    # user = { # enabled by default
-    #   enable = true;
-    #   name = "user";
-    # };
+    ansible.enable = true;
+    settings.mutable = false;
   };
-
-  user.settings.mutable = false;
-
 
   boot = {
     kernelParams = [

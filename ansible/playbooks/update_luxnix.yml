@@ -11,29 +11,28 @@
         update: true # changed from yes to true
         force: true # changed from yes to true
       register: git_update
+# # check if "{{ luxnix_dest }}/.envrac_allowed" is present
+# # if not, run direnv allow
+# - name: Check if initialize_luxnix_repo was run
+#   hosts: test_group
+#   become: true
+#   become_user: admin
+#   tasks:
+#     - name: Check if initialization is required
+#       ansible.builtin.stat:
+#         path: "{{ luxnix_dest }}/.repo_initialized"
+#       register: repo_init_check
 
-# check if "{{ luxnix_dest }}/.envrac_allowed" is present
-# if not, run direnv allow
-- name: Check if initialize_luxnix_repo was run
-  hosts: test_group
-  become: true
-  become_user: admin
-  tasks:
-    - name: Check if initialization is required
-      ansible.builtin.stat:
-        path: "{{ luxnix_dest }}/.repo_initialized"
-      register: repo_init_check
-
-- name: Run directory initialization (devenv run initialize_luxnix_repo)
-  hosts: test_group
-  become: true
-  become_user: admin
-  tasks:
-    - name: Run directory initialization
-      ansible.builtin.command:
-        cmd: devenv shell -i initialize_luxnix_repo
-        chdir: "{{ luxnix_dest }}"
-      when: repo_init_check.stat.exists == false
+# - name: Run directory initialization (devenv run initialize_luxnix_repo)
+#   hosts: test_group
+#   become: true
+#   become_user: admin
+#   tasks:
+#     - name: Run directory initialization
+#       ansible.builtin.command:
+#         cmd: devenv shell -i initialize_luxnix_repo
+#         chdir: "{{ luxnix_dest }}"
+#       when: repo_init_check.stat.exists == false
 
 - name: Run nh os switch if git repo was updated
   hosts: test_group
@@ -44,4 +43,4 @@
       ansible.builtin.command:
         cmd: nh os switch .
         chdir: "{{ luxnix_dest }}"
-      when: false #git_update.after != git_update.before
+      when: true # git_update.after != git_update.before

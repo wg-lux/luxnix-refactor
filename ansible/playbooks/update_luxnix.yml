@@ -12,7 +12,7 @@
         force: false
       register: git_update
       notify:
-        - Run nho
+        # - Run nho
         - Run nhh
 
     - name: Read admin password
@@ -22,19 +22,19 @@
       no_log: true
 
   handlers:
-    - name: Run nho
-      ansible.builtin.expect:
-        command: 'zsh -c ''cd "{{ luxnix_dest }}" && devenv shell -i nh os switch'''
-        responses:
-          "(?i)\\[sudo\\]\\s*passwort\\s*für\\s*admin:": "{{ ansible_sudo_pass }}"
-      become: true
-      become_user: admin
-      vars:
-        ansible_sudo_pass: "{{ user_password.content | b64decode }}"
+    # - name: Run nho
+    #   ansible.builtin.expect:
+    #     command: 'zsh -c ''cd "{{ luxnix_dest }}" && nh os switch'''
+    #     responses:
+    #       "(?i)\\[sudo\\]\\s*passwort\\s*für\\s*admin:": "{{ ansible_sudo_pass }}"
+    #   become: true
+    #   become_user: admin
+    #   vars:
+    #     ansible_sudo_pass: "{{ user_password.content | b64decode }}"
 
     - name: Run nhh
       ansible.builtin.expect:
-        command: 'zsh -c ''cd "{{ luxnix_dest }}" && devenv shell -i nh home switch'''
+        command: 'zsh -c ''cd "{{ luxnix_dest }}" && nh home switch'''
         responses:
           "(?i)\\[sudo\\]\\s*passwort\\s*für\\s*admin:": "{{ ansible_sudo_pass }}"
       become: true

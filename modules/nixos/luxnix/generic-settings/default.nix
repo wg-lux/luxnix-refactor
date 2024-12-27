@@ -142,8 +142,9 @@ in {
       };
     };
 
+    users.mutableUsers = lib.mkDefault cfg.mutableUsers;
+
     networking.useDHCP = lib.mkDefault cfg.useDHCP;
-    user.settings.mutableUsers = lib.mkDefault cfg.mutableUsers;
   };
 
 

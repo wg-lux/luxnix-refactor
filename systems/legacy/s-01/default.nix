@@ -16,11 +16,6 @@ in {
   # environment.pathsToLink = [
   #   "/share/fish"
   # ];
-  systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
-  systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;
-
-  security.rtkit.enable = true;
-
 
   services = {
     virtualisation.kvm.enable = false;

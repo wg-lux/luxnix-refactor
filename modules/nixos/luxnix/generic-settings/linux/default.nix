@@ -44,28 +44,28 @@ in {
       default = "/dev/disk/by-label/nixos";
     };
     kernelParams = mkOption {
-      types = types.listOf types.str;
+      type = types.listOf types.str;
       default = [];
       description = "Default Kernel Params";
     };
     blacklistedKernelModules = mkOption {
-      types = types.listOf types.str;
+      type = types.listOf types.str;
       default = [ ];
       description = "Default blacklisted Kernel Modules";
     };
     initrd = {
       supportedFilesystems = mkOption {
-        types = types.listOf types.str;
+        type = types.listOf types.str;
         default = ["nfs"];
         description = "Default supported filesystems for initrd";
       };
       kernelModules = mkOption {
-        types = types.listOf types.str;
+        type = types.listOf types.str;
         default = ["nfs"];
         description = "Default supported Kernel modules for initrd";
       };
       availableKernelModules = mkOption {
-        types = types.listOf types.str;
+        type = types.listOf types.str;
         default = [ "nvme" "xhci_pci" "ahci" "usbhid" "uas" "usb_storage" "sd_mod" ];
         description = "Default available Kernel modules for initrd";
       };
@@ -76,6 +76,7 @@ in {
 
     boot = {
       kernelModules = lib.mkDefault cfg.kernelModules;
+      extraModulePackages = lib.mkDefault cfg.extraModulePackages;
       kernelPackages = lib.mkDefault cfg.kernelPackages;
       supportedFilesystems = lib.mkForce cfg.supportedFilesystems;
       resumeDevice = lib.mkDefault cfg.resumeDevice;

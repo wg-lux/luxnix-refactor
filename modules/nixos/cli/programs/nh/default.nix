@@ -11,7 +11,7 @@ in {
     enable = mkBoolOpt false "Whether or not to enable nh (nix commandline helper).";
     luxnixDirectory = mkOption {
       type = types.str;
-      default = config.luxnix.generic-settings.luxnixDirectory;
+      default = config.luxnix.generic-settings.configurationPath;
       description = "The directory where nh expects the luxnix repository";
     };
   };

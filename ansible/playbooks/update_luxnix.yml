@@ -13,9 +13,27 @@
       register: git_update
       notify: Allow direnv
 
+    - name: Read admin password
+      ansible.builtin.slurp:
+        src: "{{ admin_password_file_source }}"
+      register: user_password
+      no_log: true
+
+    - name: Run nho (nh os switch) as admin in {{ luxnix_dest }}
+      ansible.builtin.expect:
+        command: |
+          cd "{{ luxnix_dest }}"
+          nh os switch
+        responses:
+          "(?i)\\[sudo\\]\\s*passwort\\s*für\\s*admin:": "{{ ansible_sudo_pass }}"
+      become: true
+      become_user: admin
+      vars:
+        ansible_sudo_pass: "{{ user_password.content | b64decode }}"
+
   handlers:
     - name: Allow direnv
       ansible.builtin.command:
-        cmd: "direnv allow {{ destination_dir }}/.envrc"
+        cmd: "direnv allow {{ luxnix_dest }}/.envrc"
       changed_when: false
       when: git_update.changed

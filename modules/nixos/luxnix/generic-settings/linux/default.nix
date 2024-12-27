@@ -15,6 +15,26 @@ in {
       default = pkgs.linuxPackages_latest;
       description = "Use linuxPackages_lates by default";
     };
+    kernelModules = mkOption {
+      type = types.listOf types.str;
+      description = "Default Kernel Modules";
+    };
+    extraModulePackages = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      description = "Extra Kernel Modules";
+    };
+
+    cpuMicrocode = mkOption {
+      type = types.str;
+      default = "intel";
+      description = "Default CPU Microcode";
+    };
+    processorType = mkOption {
+      type = types.str;
+      default = "x86_64";
+      description = "Default Processor Type";
+    };
     supportedFilesystems = mkOption {
       type = types.listOf types.str;
       default = ["btrfs"];
@@ -44,12 +64,18 @@ in {
         default = ["nfs"];
         description = "Default supported Kernel modules for initrd";
       };
+      availableKernelModules = mkOption {
+        types = types.listOf types.str;
+        default = [ "nvme" "xhci_pci" "ahci" "usbhid" "uas" "usb_storage" "sd_mod" ];
+        description = "Default available Kernel modules for initrd";
+      };
     };
   };
 
   config = mkIf config.luxnix.generic-settings.enable {
 
     boot = {
+      kernelModules = lib.mkDefault cfg.kernelModules;
       kernelPackages = lib.mkDefault cfg.kernelPackages;
       supportedFilesystems = lib.mkForce cfg.supportedFilesystems;
       resumeDevice = lib.mkDefault cfg.resumeDevice;

@@ -96,6 +96,7 @@ in {
     	vscode
       obsidian
       e2fsprogs
+      spotify
     ];
 
 

@@ -13,14 +13,6 @@ in {
   options.luxnix.generic-settings = {
     enable = mkEnableOption "Enable generic settings";
 
-    luxnixDirectory = mkOption {
-      type = types.path;
-      default = "/home/${config.user.admin.name}/luxnix-production";
-      description = ''
-        The directory where the luxnix repository is located.
-      '';
-    };
-
     sensitiveServiceGroupName = mkOption {
       type = types.str;
       default = "sensitive-service-group";
@@ -40,6 +32,22 @@ in {
       default = 901;
       description = ''
         The GID of the sensitive service group.
+      '';
+    };
+
+    mutableUsers = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Allow users to be mutable.
+      '';
+    };
+
+    useDHCP = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Use DHCP for network configuration.
       '';
     };
 
@@ -103,7 +111,7 @@ in {
 
     configurationPath = mkOption {
       type = types.path;
-      default = "/home/${config.user.admin.name}/luxnix/";
+      default = "/home/${config.user.admin.name}/luxnix-production/";
       description = ''
         Path to the luxnix directory.
       '';
@@ -111,17 +119,9 @@ in {
 
     systemConfigurationPath = mkOption {
       type = types.path;
-      default = "/home/${config.user.admin.name}/luxnix/systems/x86_64-linux/${hostname}";
+      default = "/home/${config.user.admin.name}/luxnix-production/systems/x86_64-linux/${hostname}";
       description = ''
         Path to the systems specif nixos configuration directory.
-      '';
-    };
-
-    luxnixAdministrationPath = mkOption {
-      type = types.path;
-      default = "/home/${config.user.admin.name}/luxnix-administration";
-      description = ''
-        Path to the luxnix administration directory.
       '';
     };
 
@@ -141,6 +141,9 @@ in {
         gid = cfg.sensitiveServiceGID;
       };
     };
+
+    networking.useDHCP = lib.mkDefault cfg.useDHCP;
+    user.settings.mutableUsers = lib.mkDefault cfg.mutableUsers;
   };
 
 

@@ -16,22 +16,17 @@ in {
   options.luxnix.python.sw = with types; {
     enable = mkBoolOpt false "Enable or disable sw python";
 
-    # Other bool options are: enable cuda support for nix packages, add xserver driver, add initrd-kernel-module, addd autoadddriverrunpath
-    # enable prime sync, enable modesetting, 
     pythonVersion = mkOption {
       type = types.str;
       default = "312";
       description = "The python version to use";
     };
 
-    # input for nvidia, intel and amd busid
     pythonPackage = mkOption {
       default = pkgs."python${cfg.pythonVersion}Full";
       type = types.package;
       description = "The python package to use";
     };
-
-
 
     pythonPackages = mkOption {
       default = with pkgs."python${cfg.pythonVersion}Packages" ; [
@@ -44,12 +39,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-
     environment.systemPackages = [
       cfg.pythonPackage
       pkgs.ansible
-      # pkgs.pexpect
     ] ++ cfg.pythonPackages;
   };
-  
 }

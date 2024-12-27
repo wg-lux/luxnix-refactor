@@ -13,6 +13,14 @@ in {
   options.luxnix.generic-settings = {
     enable = mkEnableOption "Enable generic settings";
 
+    luxnixDirectory = mkOption {
+      type = types.path;
+      default = "/home/${config.user.admin.name}/luxnix-production";
+      description = ''
+        The directory where the luxnix repository is located.
+      '';
+    };
+
     sensitiveServiceGroupName = mkOption {
       type = types.str;
       default = "sensitive-service-group";

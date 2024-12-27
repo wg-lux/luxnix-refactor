@@ -1,4 +1,4 @@
-- name: Ensure luxnix-test-target contains an up-to-date Git repo
+- name: Update Nix
   hosts: test_group
   become: true
   become_user: "{{ ansible_become_user }}"
@@ -9,9 +9,11 @@
         dest: "{{ luxnix_dest }}"
         version: "{{ luxnix_branch }}"
         update: true
-        force: true
+        force: false
       register: git_update
-      notify: Allow direnv
+      notify:
+        - Run nho
+        - Run nhh
 
     - name: Read admin password
       ansible.builtin.slurp:
@@ -19,11 +21,10 @@
       register: user_password
       no_log: true
 
-    - name: Run nho (nh os switch) as admin in {{ luxnix_dest }}
+  handlers:
+    - name: Run nho
       ansible.builtin.expect:
-        command: |
-          cd "{{ luxnix_dest }}"
-          nh os switch
+        command: 'zsh -c ''cd "{{ luxnix_dest }}" && devenv shell -i nh os switch'''
         responses:
           "(?i)\\[sudo\\]\\s*passwort\\s*für\\s*admin:": "{{ ansible_sudo_pass }}"
       become: true
@@ -31,9 +32,12 @@
       vars:
         ansible_sudo_pass: "{{ user_password.content | b64decode }}"
 
-  handlers:
-    - name: Allow direnv
-      ansible.builtin.command:
-        cmd: "direnv allow {{ luxnix_dest }}/.envrc"
-      changed_when: false
-      when: git_update.changed
+    - name: Run nhh
+      ansible.builtin.expect:
+        command: 'zsh -c ''cd "{{ luxnix_dest }}" && devenv shell -i nh home switch'''
+        responses:
+          "(?i)\\[sudo\\]\\s*passwort\\s*für\\s*admin:": "{{ ansible_sudo_pass }}"
+      become: true
+      become_user: admin
+      vars:
+        ansible_sudo_pass: "{{ user_password.content | b64decode }}"

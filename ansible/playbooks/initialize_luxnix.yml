@@ -1,0 +1,38 @@
+- name: Ensure luxnix-test-target contains an up-to-date Git repo
+  hosts: test_group
+  become: true
+  become_user: "{{ ansible_become_user }}"
+  vars:
+    ansible_python_interpreter: "/run/current-system/sw/bin/python"
+  tasks:
+    - name: Clone or update the wg-lux/luxnix-refactor repository
+      ansible.builtin.git:
+        repo: "{{ luxnix_repo }}"
+        dest: "{{ luxnix_dest }}"
+        version: "{{ luxnix_branch }}"
+        update: true
+        force: true
+      register: git_update
+      notify:
+        - Allow direnv
+        - Build devenv
+
+    - name: Read admin password
+      ansible.builtin.slurp:
+        src: "{{ admin_password_file_source }}"
+      register: user_password
+      no_log: true
+
+  handlers:
+    - name: Allow direnv
+      ansible.builtin.command:
+        cmd: "direnv allow {{ luxnix_dest }}/.envrc"
+      changed_when: false
+      when: git_update.changed
+
+    - name: Build devenv
+      ansible.builtin.command:
+        cmd: 'zsh -c ''cd {{ luxnix_dest }} && devenv shell -i echo "hohoho" && devenv build'''
+      args:
+      changed_when: false
+      when: git_update.changed

@@ -48,10 +48,14 @@ in
   scripts = {
     hello.exec = "${pkgs.uv}/bin/uv run python hello.py";
     utest.exec = "${pkgs.uv}/bin/uv run python -m unittest";
-    initialize_luxnix_repo.exec = ''
+    initialize-luxnix-repo.exec = ''
       direnv allow
       touch .repo_initialized
     '';
+    
+    init-server-ssh.exec = "./tmux/init-server-ssh.sh";
+    kill-server-ssh.exec = "tmux kill-session -t ssh-servers";
+    conn-server-ssh.exec = "tmux attach-session -t ssh-servers";
   };
 
   processes = {

@@ -32,6 +32,7 @@ in {
         yazi.enable = true;
         zoxide.enable = true;
       };
+      terminals.tmux.enable = true;
     };
   };
 }

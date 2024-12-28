@@ -1,4 +1,4 @@
-{config, pkgs, lib, ...}@inputs: {
+{config, pkgs, ...}@inputs: {
   
   roles = {
     base-server.enable = true; 

@@ -85,7 +85,6 @@ in {
 
     roles = {
       desktop.enable = true;
-      aglnet.client.enable = true;
       endoreg-client.enable = true;
     };
 

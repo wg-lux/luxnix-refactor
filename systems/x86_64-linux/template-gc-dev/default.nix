@@ -1,40 +1,25 @@
-{
+{ config,
   pkgs,
   lib,
+  modulesPath,
   ...
 }@inputs: 
   let
-    sensitiveHdd = import ./sensitive-hdd.nix {};
-    roles = import ./roles.nix;
-    endoreg = import ./endoreg.nix;
-    boot = import ./boot.nix;
-    luxnixNvidiaPrime = import ./luxnix.nvidia-prime-settings.nix; 
-    services = import ./services.nix;
-    luxnixHardware = import ./luxnix.hardware.nix;
-
-    extraImports = [
-      ./boot-decryption-config.nix
-    ];
+    extraImports = [ ];
 
   in
 {
-  imports = [
-    # ./hardware-configuration.nix
-    ./disks.nix
-  ]++extraImports;
 
+    imports = [
+      (modulesPath + "/installer/scan/not-detected.nix")
+      ./boot-decryption-config.nix
+      ./disks.nix
+      (import ./roles.nix {inherit config pkgs; })
+      (import ./endoreg.nix { inherit config pkgs; })
+      (import ./services.nix { inherit config pkgs lib; })
+      (import ./luxnix.nix { inherit config pkgs; })
 
-  
-
-  ##### CUSTOMIZE ######
-  luxnix.hardware = luxnixHardware;  
-  luxnix.nvidia-prime = luxnixNvidiaPrime;
-
-
-  services = services;
-  boot = boot;
-  roles = roles;
-  endoreg = endoreg;
+    ]++extraImports;
 
   user = {
     admin = {

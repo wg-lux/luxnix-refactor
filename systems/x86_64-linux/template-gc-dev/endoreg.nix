@@ -1,6 +1,7 @@
-{
-  sensitive-storage = {
-    enable = true; 
-    partitionConfigurations = (import ./sensitive-storage.nix {} );
+{config, ...}@inputs: {
+  endoreg = {
+    sensitiveStorage = {
+      enable = false;
+    };
   };
 }

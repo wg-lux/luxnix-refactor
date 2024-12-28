@@ -1,7 +1,7 @@
 {config, ...}@inputs: {
   endoreg = {
     sensitiveStorage = {
-      enable = true;
+      enable = false;
       partitionConfigurations = {
         # Partition dropoff
         "dropoff" = {

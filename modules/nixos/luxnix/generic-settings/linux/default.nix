@@ -11,7 +11,7 @@ with lib.luxnix; let
 in {
   options.luxnix.generic-settings.linux = { 
     kernelPackages = mkOption {
-      type = types.package;
+      type = types.raw;
       default = pkgs.linuxPackages_latest;
       description = "Use linuxPackages_lates by default";
     };
@@ -24,7 +24,6 @@ in {
       default = [];
       description = "Extra Kernel Modules";
     };
-
     cpuMicrocode = mkOption {
       type = types.str;
       default = "intel";
@@ -45,7 +44,7 @@ in {
     };
     kernelParams = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = "Default Kernel Params";
     };
     blacklistedKernelModules = mkOption {
@@ -66,7 +65,7 @@ in {
       };
       availableKernelModules = mkOption {
         type = types.listOf types.str;
-        default = [ "nvme" "xhci_pci" "ahci" "usbhid" "uas" "usb_storage" "sd_mod" ];
+        default = [  ];
         description = "Default available Kernel modules for initrd";
       };
     };
@@ -74,13 +73,16 @@ in {
 
   config = mkIf config.luxnix.generic-settings.enable {
 
+    
+    hardware.cpu."${cfg.cpuMicrocode}".updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+    
     boot = {
-      kernelModules = lib.mkDefault cfg.kernelModules;
-      extraModulePackages = lib.mkDefault cfg.extraModulePackages;
-      kernelPackages = lib.mkDefault cfg.kernelPackages;
+      kernelModules = cfg.kernelModules;
+      extraModulePackages = cfg.extraModulePackages;
+      kernelParams = cfg.kernelParams;
+      kernelPackages = cfg.kernelPackages;
       supportedFilesystems = lib.mkForce cfg.supportedFilesystems;
-      resumeDevice = lib.mkDefault cfg.resumeDevice;
-      kernelParams = lib.mkDefault cfg.kernelParams;
+      resumeDevice = cfg.resumeDevice;
       blacklistedKernelModules = cfg.blacklistedKernelModules;
       initrd = cfg.initrd;
     };

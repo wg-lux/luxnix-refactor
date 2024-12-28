@@ -80,6 +80,9 @@ in {
       # "aarch64-linux"
     ];
 
+
+    luxnix.gpu-eval.enable = true;
+
     roles = {
       desktop.enable = true;
       aglnet.client.enable = true;

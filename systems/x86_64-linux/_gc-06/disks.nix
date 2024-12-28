@@ -1,77 +1,23 @@
-{
-  disko.devices = {
-    disk = {
-      nvme0n1 = {
-        type = "disk";
-        device = "/dev/nvme0n1";
-        content = {
-          type = "gpt";
-          partitions = {
-            ESP = {
-              label = "boot";
-              name = "ESP";
-              size = "512M";
-              type = "EF00";
-              content = {
-                type = "filesystem";
-                format = "vfat";
-                mountpoint = "/boot";
-                mountOptions = [
-                  "defaults"
-                ];
-              };
-            };
-            luks = {
-              size = "100%";
-              label = "luks";
-              content = {
-                type = "luks";
-                name = "cryptroot";
-                extraOpenArgs = [
-                  "--allow-discards"
-                  "--perf-no_read_workqueue"
-                  "--perf-no_write_workqueue"
-                ];
-                # https://0pointer.net/blog/unlocking-luks2-volumes-with-tpm2-fido2-pkcs11-security-hardware-on-systemd-248.html
-                settings = {crypttabExtraOpts = ["fido2-device=auto" "token-timeout=10"];};
-                content = {
-                  type = "btrfs";
-                  extraArgs = ["-L" "nixos" "-f"];
-                  subvolumes = {
-                    "/root" = {
-                      mountpoint = "/";
-                      mountOptions = ["subvol=root" "compress=zstd" "noatime"];
-                    };
-                    "/home" = {
-                      mountpoint = "/home";
-                      mountOptions = ["subvol=home" "compress=zstd" "noatime"];
-                    };
-                    "/nix" = {
-                      mountpoint = "/nix";
-                      mountOptions = ["subvol=nix" "compress=zstd" "noatime"];
-                    };
-                    "/persist" = {
-                      mountpoint = "/persist";
-                      mountOptions = ["subvol=persist" "compress=zstd" "noatime"];
-                    };
-                    "/log" = {
-                      mountpoint = "/var/log";
-                      mountOptions = ["subvol=log" "compress=zstd" "noatime"];
-                    };
-                    "/swap" = {
-                      mountpoint = "/swap";
-                      swap.swapfile.size = "16G";
-                    };
-                  };
-                };
-              };
-            };
-          };
-        };
-      };
-    };
-  };
+let
+  usb-uuid = "50bfb364-e2a1-435d-ab8a-c5ba5e4b8f30";
+  usb-mountpoint = "/mnt/usb_key";
+  usb-device = "/dev/disk/by-uuid/50bfb364-e2a1-435d-ab8a-c5ba5e4b8f30";
 
-  fileSystems."/persist".neededForBoot = true;
-  fileSystems."/var/log".neededForBoot = true;
+  bs = 1;
+  offset-m = 50;
+  offset-b = 52428800;
+  keyfile-size = 4096;
+in {
+  # Ensure necessary kernel modules for USB and LUKS
+  boot.initrd.availableKernelModules = [ "dm-crypt" "sd_mod" "usb_storage" ];
+
+  # 'cryptroot' is defined by disko as the name of the LUKS container.
+  # Use the usb-device as keyFile, with offset and size defined above.
+  boot.initrd.luks.devices."cryptroot" = {
+    keyFile            = usb-device;
+    keyFileOffset      = offset-b;
+    keyFileSize        = keyfile-size;
+    preLVM             = true;
+    keyFileTimeout = 10; # if no prompt is displayed, try pressing "Esc"
+  };
 }

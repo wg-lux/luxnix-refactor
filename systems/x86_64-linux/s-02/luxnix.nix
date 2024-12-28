@@ -12,7 +12,7 @@
       enable = true;
       hostPlatform = "x86_64-linux"; # is default
 
-      systemConfigurationPath = "/home/admin/luxnix";
+      systemConfigurationPath = "/home/admin/luxnix"; # default is "/home/admin/luxnix-production"
       # sensitiveServiceGroupName = "sensitive-service-group"; # is default
 
       # sensitiveServiceGID = 901; # is default
@@ -45,7 +45,8 @@
         kernelModules = [ "kvm-intel" ];
         extraModulePackages = []; # default
         initrd = {
-          kernelModules = ["dm-snapshot" ]; # default
+          supportedFilesystems = ["nfs"]; # default
+          kernelModules = [ "nfs" ]; # default
           availableKernelModules =  [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
         };
 

@@ -38,23 +38,19 @@
         command: "nh os switch"
         responses:
           "(?i)\\[sudo\\]\\s*passwort\\s*für\\s*admin:": "{{ ansible_sudo_pass }}"
-      become: true
-      become_user: admin
       vars:
         ansible_sudo_pass: "{{ user_password.content | b64decode }}"
       async: 900 # 15 minutes
       poll: 5
-      when: git_update.changed
+      when: true # git_update.changed
 
     - name: Run nhh
       ansible.builtin.expect:
         command: "nh home switch"
         responses:
           "(?i)\\[sudo\\]\\s*passwort\\s*für\\s*admin:": "{{ ansible_sudo_pass }}"
-      become: true
-      become_user: admin
       vars:
         ansible_sudo_pass: "{{ user_password.content | b64decode }}"
       async: 900
       poll: 5
-      when: git_update.changed
+      when: true # git_update.changed

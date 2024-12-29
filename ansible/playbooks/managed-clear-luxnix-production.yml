@@ -1,5 +1,5 @@
 - name: Delete the luxnix production directory
-  hosts: base_server
+  hosts: managed
   become: true
   become_user: "{{ ansible_become_user }}"
   vars:

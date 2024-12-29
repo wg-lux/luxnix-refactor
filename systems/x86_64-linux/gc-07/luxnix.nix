@@ -16,7 +16,7 @@
       enable = true;
       hostPlatform = "x86_64-linux"; # is default
 
-      systemConfigurationPath = "/home/admin/luxnix";
+      systemConfigurationPath = "/home/admin/luxnix"; # default is "/home/admin/luxnix-production"
       # sensitiveServiceGroupName = "sensitive-service-group"; # is default
 
       # sensitiveServiceGID = 901; # is default
@@ -46,21 +46,22 @@
         cpuMicrocode = "intel"; # default is "intel"
         # processorType = "x86_64"; # default
         kernelPackages = pkgs.linuxPackages_latest; # default
-        kernelModules = [ "kvm-intel" ];
+        kernelModules = [ "intel" ];
         extraModulePackages = []; # default
         initrd = {
-          kernelModules = ["dm-snapshot" ]; # default
-          availableKernelModules = [ 
-            "vmd" "xhci_pci" "ahci" "nvme" 
-            "usb_storage" "sd_mod"
-          ];
+          supportedFilesystems = ["nfs"]; # default
+          kernelModules = [ "nfs" ]; # default
+          availableKernelModules =  [ "vmd" "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" ];
         };
 
         supportedFilesystems = ["btrfs"]; # default
         resumeDevice = "/dev/disk/by-label/nixos"; # default
         kernelParams = []; # default
         
-        blacklistedKernelModules = []; # default    
+        blacklistedKernelModules = []; # default
+
+        
+    
       };
     };
   };

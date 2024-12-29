@@ -1,5 +1,5 @@
 - name: Ensure luxnix-test-target contains an up-to-date Git repo
-  hosts: base_server
+  hosts: managed
   become: true
   become_user: "{{ ansible_become_user }}"
   vars:

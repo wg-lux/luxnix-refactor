@@ -11,9 +11,6 @@
         update: true
         force: false
       register: git_update
-      notify:
-        - Run nho
-        - Run nhh
 
     - name: Ensure the user passwords directory exists
       ansible.builtin.file: # filepath = "{{ local_users_passwords_dir  }}"
@@ -36,10 +33,9 @@
       register: user_password
       no_log: true
 
-  handlers:
     - name: Run nho
       ansible.builtin.expect:
-        command: 'zsh -c ''cd "{{ luxnix_dest }}" && nh os switch .'''
+        command: "nh os switch"
         responses:
           "(?i)\\[sudo\\]\\s*passwort\\s*für\\s*admin:": "{{ ansible_sudo_pass }}"
       become: true
@@ -48,10 +44,11 @@
         ansible_sudo_pass: "{{ user_password.content | b64decode }}"
       async: 900 # 15 minutes
       poll: 5
+      when: git_update.changed
 
     - name: Run nhh
       ansible.builtin.expect:
-        command: 'zsh -c ''cd "{{ luxnix_dest }}" && nh home switch .'''
+        command: "nh home switch"
         responses:
           "(?i)\\[sudo\\]\\s*passwort\\s*für\\s*admin:": "{{ ansible_sudo_pass }}"
       become: true
@@ -60,3 +57,4 @@
         ansible_sudo_pass: "{{ user_password.content | b64decode }}"
       async: 900
       poll: 5
+      when: git_update.changed

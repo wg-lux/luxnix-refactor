@@ -1,0 +1,50 @@
+- name: Update Nix
+  hosts: managed
+  become: true
+  become_user: "{{ ansible_become_user }}"
+  tasks:
+    - name: Read admin password
+      ansible.builtin.slurp:
+        src: "{{ admin_password_file }}"
+      register: user_password
+      no_log: true
+
+    - name: Run nho
+      ansible.builtin.expect:
+        command: "nh os switch"
+        responses:
+          "(?i)\\[sudo\\]\\s*passwort\\s*für\\s*admin:": "{{ ansible_sudo_pass }}"
+      become: true
+      become_user: admin
+      vars:
+        ansible_sudo_pass: "{{ user_password.content | b64decode }}"
+      async: 900 # 15 minutes
+      poll: 5
+
+    - name: Run nhh
+      ansible.builtin.expect:
+        command: "nh home switch"
+        responses:
+          "(?i)\\[sudo\\]\\s*passwort\\s*für\\s*admin:": "{{ ansible_sudo_pass }}"
+      become: true
+      become_user: admin
+      vars:
+        ansible_sudo_pass: "{{ user_password.content | b64decode }}"
+      async: 900 # 15 minutes
+      poll: 5
+#
+# - name: Run nho
+#   ansible.builtin.shell:
+#     cmd: 'zsh -c ''cd "{{ luxnix_dest }}" && sudo nixos-rebuild switch --flake .'''
+#   become: true
+#   become_user: admin
+#   async: 900 # 15 minutes
+#   poll: 15
+
+# - name: Run nhh
+#   ansible.builtin.shell:
+#     cmd: 'zsh -c ''cd "{{ luxnix_dest }}" && sudo home-manager switch --flake .'''
+#   become: true
+#   become_user: admin
+#   async: 900 # 15 minutes
+#   poll: 15

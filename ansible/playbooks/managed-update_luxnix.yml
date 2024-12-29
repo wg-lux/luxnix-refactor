@@ -32,9 +32,9 @@
 
     - name: Read admin password
       ansible.builtin.slurp:
-        src: "{{ admin_password_file_source }}"
+        src: "{{ admin_password_file }}"
       register: user_password
-      no_log: true
+      # no_log: true
 
   handlers:
     - name: Run nho

@@ -109,9 +109,16 @@ in {
       '';
     };
 
+    _configurationPathRelative = mkOption {
+      type = types.str;
+      default = "luxnix-production";
+      description = ''
+        Relative path to the luxnix directory.
+      '';
+    };
     configurationPath = mkOption {
       type = types.path;
-      default = "/home/${config.user.admin.name}/luxnix-production/";
+      default = "/home/${config.user.admin.name}/${cfg._configurationPathRelative}/";
       description = ''
         Path to the luxnix directory.
       '';
@@ -119,7 +126,7 @@ in {
 
     systemConfigurationPath = mkOption {
       type = types.path;
-      default = "/home/${config.user.admin.name}/luxnix-production/systems/x86_64-linux/${hostname}";
+      default = "/home/${config.user.admin.name}/${cfg._configurationPathRelative}/systems/x86_64-linux/${hostname}";
       description = ''
         Path to the systems specif nixos configuration directory.
       '';

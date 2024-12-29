@@ -16,9 +16,10 @@
     # syncthing.enable = false;
   };
 
-  # luxnix.django-demo-app = {
-  #   enable = true;
-  # };
+  luxnix.generic-settings = {
+    enable = true;
+    configurationPath = "luxnix";
+  };
 
   roles = {
     development.enable = true;

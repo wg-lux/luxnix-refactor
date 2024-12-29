@@ -49,9 +49,7 @@ in {
       home-manager.enable = true;
     };
 
-    home.sessionVariables = {
-      FLAKE = config.luxnix.generic-settings.configurationPath;
-    };
+    
 
     nix = {
       settings = {

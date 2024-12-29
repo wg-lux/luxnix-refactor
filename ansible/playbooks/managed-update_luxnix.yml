@@ -45,7 +45,8 @@
       become: true
       become_user: admin
       vars:
-        ansible_sudo_pass: "{{ user_password.content | b64decode }}"
+      async: 900
+      poll: 5
 
     - name: Run nhh
       ansible.builtin.expect:
@@ -56,3 +57,5 @@
       become_user: admin
       vars:
         ansible_sudo_pass: "{{ user_password.content | b64decode }}"
+      async: 900
+      poll: 5

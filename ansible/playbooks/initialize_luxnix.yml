@@ -1,5 +1,5 @@
 - name: Ensure luxnix-test-target contains an up-to-date Git repo
-  hosts: test_group
+  hosts: base_server
   become: true
   become_user: "{{ ansible_become_user }}"
   vars:
@@ -13,26 +13,38 @@
         update: true
         force: true
       register: git_update
-      notify:
-        - Allow direnv
-        - Build devenv
+      # notify:
+      #   - Allow direnv
+      #   - Build devenv
+
+    - name: Ensure the user passwords directory exists
+      ansible.builtin.file: # filepath = "{{ local_users_passwords_dir  }}"
+        path: "{{ local_users_passwords_dir }}"
+        state: directory
+        owner: "admin"
+        mode: "0700"
+
+    - name: Deploy user passwords
+      ansible.builtin.copy:
+        src: "{{ admin_password_file_source }}"
+        dest: "{{ admin_password_file }}"
+        mode: "0600"
+        owner: "admin"
+      register: user_password
+      # when: git_update.changed
 
     - name: Read admin password
       ansible.builtin.slurp:
-        src: "{{ admin_password_file_source }}"
+        src: "{{ admin_password_file }}"
       register: user_password
-      no_log: true
+      # no_log: true
 
-  handlers:
     - name: Allow direnv
       ansible.builtin.command:
         cmd: "direnv allow {{ luxnix_dest }}/.envrc"
-      changed_when: false
-      when: git_update.changed
+        creates: "{{ luxnix_dest }}/.envrc_allowed"
 
     - name: Build devenv
-      ansible.builtin.command:
-        cmd: 'zsh -c ''cd {{ luxnix_dest }} && devenv shell -i echo "hohoho" && devenv build'''
-      args:
-      changed_when: false
-      when: git_update.changed
+      ansible.builtin.shell:
+        cmd: 'zsh -c ''cd "{{ luxnix_dest }}" && devenv build'''
+        creates: "{{ luxnix_dest }}/.devenv_built"

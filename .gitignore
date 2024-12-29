@@ -1,6 +1,7 @@
 .repo_initialized
 # direnv
 .direnv
+.devenv_built
 .env
 ~git-credentials
 utils/secrets/

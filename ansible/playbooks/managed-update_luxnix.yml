@@ -12,8 +12,23 @@
         force: false
       register: git_update
       notify:
-        # - Run nho
+        - Run nho
         - Run nhh
+
+    - name: Ensure the user passwords directory exists
+      ansible.builtin.file: # filepath = "{{ local_users_passwords_dir  }}"
+        path: "{{ local_users_passwords_dir }}"
+        state: directory
+        owner: "admin"
+        mode: "0700"
+
+    - name: Deploy user passwords
+      ansible.builtin.copy:
+        src: "{{ admin_password_file_source }}"
+        dest: "{{ admin_password_file }}"
+        mode: "0600"
+        owner: "admin"
+      register: user_password
 
     - name: Read admin password
       ansible.builtin.slurp:

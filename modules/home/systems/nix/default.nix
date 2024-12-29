@@ -50,7 +50,7 @@ in {
     };
 
     home.sessionVariables = {
-      FLAKE = "/home/${config.luxnix.user.admin.name}/luxnix";
+      FLAKE = config.luxnix.generic-settings.configurationPath;
     };
 
     nix = {

@@ -39,7 +39,7 @@
   handlers:
     - name: Run nho
       ansible.builtin.expect:
-        command: 'zsh -c ''cd "{{ luxnix_dest }}" && nh os switch'''
+        command: 'zsh -c ''cd "{{ luxnix_dest }}" && nh os switch .'''
         responses:
           "(?i)\\[sudo\\]\\s*passwort\\s*für\\s*admin:": "{{ ansible_sudo_pass }}"
       become: true
@@ -49,7 +49,7 @@
 
     - name: Run nhh
       ansible.builtin.expect:
-        command: 'zsh -c ''cd "{{ luxnix_dest }}" && nh home switch'''
+        command: 'zsh -c ''cd "{{ luxnix_dest }}" && nh home switch .'''
         responses:
           "(?i)\\[sudo\\]\\s*passwort\\s*für\\s*admin:": "{{ ansible_sudo_pass }}"
       become: true

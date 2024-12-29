@@ -16,7 +16,7 @@
       enable = true;
       hostPlatform = "x86_64-linux"; # is default
 
-      systemConfigurationPath = "/home/admin/luxnix";
+      configurationPath = "/home/admin/luxnix";
       # sensitiveServiceGroupName = "sensitive-service-group"; # is default
 
       # sensitiveServiceGID = 901; # is default

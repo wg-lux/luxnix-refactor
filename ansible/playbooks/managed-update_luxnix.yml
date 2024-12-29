@@ -45,7 +45,8 @@
       become: true
       become_user: admin
       vars:
-      async: 900
+        ansible_sudo_pass: "{{ user_password.content | b64decode }}"
+      async: 900 # 15 minutes
       poll: 5
 
     - name: Run nhh

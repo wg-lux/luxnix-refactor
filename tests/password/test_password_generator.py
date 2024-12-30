@@ -1,9 +1,10 @@
 import unittest
 from lx_administration.password.generator import (
     PasswordGenerator,
-    ReadablePasswordGenerator
+    ReadablePasswordGenerator,
 )
 import string
+
 
 class TestPasswordGenerator(unittest.TestCase):
     """
@@ -59,10 +60,12 @@ class TestPasswordGenerator(unittest.TestCase):
         password = self.readable_generator.generate_readable_password()
         self.assertEqual(len(password), 12)
         self.assertTrue(
-            all(c in 'aeiou' or c in (
-                set(string.ascii_lowercase) - set('aeiou')
-            ) for c in password)
+            all(
+                c in "aeiou" or c in (set(string.ascii_lowercase) - set("aeiou"))
+                for c in password
+            )
         )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

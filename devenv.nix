@@ -45,13 +45,36 @@ in
     };
   };
 
+  tasks = {
+
+    #TODO @maxhild Document the tasks
+    # `devenv tasks run autoconf:finished` calls the autoconf:finished task
+    # Runs all tasks in "after" field before executing the task
+    # Requires valid ansible key
+    "autoconf:generate-hostinfo" = {
+      description = "Generate conf/hostinfo.json; Generates hostinfo @ ./docs/hostinfo\
+       (summary markdown; html split by host)";
+      exec = "./scripts/ansible-cmdb.sh";
+    };
+
+    "autoconf:finished" = {
+      description = "Start the finalize task";
+      exec = "echo 'Starting finalize task'";
+      after = [ "autoconf:generate-hostinfo"];
+    };
+  };
+
   scripts = {
     hello.exec = "${pkgs.uv}/bin/uv run python hello.py";
     utest.exec = "${pkgs.uv}/bin/uv run python -m unittest";
-  };
-
-  tasks = {
-  
+    initialize-luxnix-repo.exec = ''
+      direnv allow
+      touch .repo_initialized
+    '';
+    
+    init-server-ssh.exec = "./tmux/init-server-ssh.sh";
+    kill-server-ssh.exec = "tmux kill-session -t ssh-servers";
+    conn-server-ssh.exec = "tmux attach-session -t ssh-servers";
   };
 
   processes = {

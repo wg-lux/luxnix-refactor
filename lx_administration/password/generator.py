@@ -1,10 +1,13 @@
 import string
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC  # type: ignore
+from cryptography.hazmat.primitives import hashes  # type: ignore
+from cryptography.hazmat.backends import default_backend  # type: ignore
 import base64
 import os
 import secrets
+from faker import Faker
+from datetime import datetime
+import shutil
 
 
 class PasswordGenerator:
@@ -45,12 +48,9 @@ class PasswordGenerator:
         :param num_words: Number of words in the passphrase.
         :return: A random passphrase string.
         """
-        try:
-            with open("/usr/share/dict/words") as f:
-                words = f.read().splitlines()
-        except FileNotFoundError:
-            words = ["example", "word", "list", "for", "testing"]
-        return " ".join(secrets.choice(words) for _ in range(num_words))
+        fake = Faker()
+        words = [fake.word() for _ in range(num_words)]
+        return "-".join(words)
 
     def create_password_hash(self, password):
         """
@@ -70,34 +70,24 @@ class PasswordGenerator:
         key = kdf.derive(password.encode())
         return base64.urlsafe_b64encode(salt + key).decode()
 
+    def create_user_passphrase_file(self, username, hostname, n_words=4):
+        passphrase = self.generate_random_passphrase(n_words)
+        hashed = self.create_password_hash(passphrase)
 
-class ReadablePasswordGenerator(PasswordGenerator):
-    """
-    A class to generate readable passwords using alternating consonants and vowels.
-    """
+        timestamp = datetime.now().strftime("%Y_%m_%d__%H_%M_%S")
+        raw_path = f"./secrets/user-passwords/{username}@{hostname}_raw"
+        hashed_path = f"./secrets/user-passwords/{username}@{hostname}_hashed"
+        archived_raw = f"./secrets/archived/{username}@{hostname}_raw_{timestamp}"
+        archived_hashed = f"./secrets/archived/{username}@{hostname}_hashed_{timestamp}"
 
-    def __init__(self, length=12, security_level=1):
-        """
-        Initialize the ReadablePasswordGenerator with a specified
-        length and security level.
+        for src, dest in [(raw_path, archived_raw), (hashed_path, archived_hashed)]:
+            if os.path.exists(src):
+                os.makedirs(os.path.dirname(dest), exist_ok=True)
+                shutil.move(src, dest)
 
-        :param length: Length of the password to be generated.
-        :param security_level: Security level (not used in current implementation).
-        """
-        super().__init__(length, security_level)
+        os.makedirs(os.path.dirname(raw_path), exist_ok=True)
+        with open(raw_path, "w") as raw_file:
+            raw_file.write(passphrase)
 
-    def generate_readable_password(self):
-        """
-        Generate a readable password using alternating consonants and vowels.
-
-        :return: A readable password string.
-        """
-        vowels = "aeiou"
-        consonants = "".join(set(string.ascii_lowercase) - set(vowels))
-        password = []
-        for i in range(self.length):
-            if i % 2 == 0:
-                password.append(secrets.choice(consonants))
-            else:
-                password.append(secrets.choice(vowels))
-        return "".join(password)
+        with open(hashed_path, "w") as hashed_file:
+            hashed_file.write(hashed)

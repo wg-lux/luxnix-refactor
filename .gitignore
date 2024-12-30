@@ -7,6 +7,9 @@
 utils/secrets/
 *keyfile.bin
 luxnix.code-workspace
+docs/hostinfo/
+docs/luxnix-hostinfo.md
+conf/hostinfo.json
 
 # pre-commit
 .pre-commit-config.yaml
